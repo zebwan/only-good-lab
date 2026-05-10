@@ -269,6 +269,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 /* =========================
    ABOUT US STICKY TEXT REVEAL
+   Desktop only. Mobile is static for stable iPhone scrolling.
 ========================= */
 document.addEventListener("DOMContentLoaded", () => {
   if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
@@ -295,12 +296,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
         return `<span class="about-word">${chars}</span>`;
       })
-      .join("");
+      .join(" ");
 
     aboutText.dataset.processed = "true";
   }
 
   const chars = Array.from(aboutText.querySelectorAll(".about-char"));
+  const isMobile = window.matchMedia("(max-width: 760px)").matches;
+
+  if (isMobile) {
+    gsap.set(aboutText, { clearProps: "transform" });
+    chars.forEach((char) => char.classList.add("is-active"));
+    return;
+  }
+
   let previousActive = -1;
 
   function updateActiveChars(activeCount) {
@@ -325,51 +334,29 @@ document.addEventListener("DOMContentLoaded", () => {
     return Math.max(0, textHeight - maskHeight + extraMove);
   }
 
-  const mm = gsap.matchMedia();
+  ScrollTrigger.create({
+    trigger: aboutSection,
+    start: "top top",
+    end: "bottom bottom",
+    scrub: true,
+    invalidateOnRefresh: true,
+    onUpdate: (self) => {
+      const progress = self.progress;
+      const distance = getDistance(24);
 
-  function createAboutScroll(config) {
-    const trigger = ScrollTrigger.create({
-      trigger: aboutSection,
-      start: "top top",
-      end: "bottom bottom",
-      scrub: true,
-      invalidateOnRefresh: true,
-      onUpdate: (self) => {
-        const progress = self.progress;
+      gsap.set(aboutText, {
+        y: -distance * progress
+      });
 
-        const distance = getDistance(config.extraMove);
-        gsap.set(aboutText, {
-          y: -distance * progress
-        });
+      const revealProgress = Math.min(progress * 1.35, 1);
+      const activeCount = Math.floor(revealProgress * (chars.length - 1));
 
-        const revealProgress = Math.min(progress * config.revealSpeed, 1);
-        const activeCount = Math.floor(revealProgress * (chars.length - 1));
-
-        updateActiveChars(activeCount);
-      },
-      onLeaveBack: () => {
-        gsap.set(aboutText, { y: 0 });
-        updateActiveChars(-1);
-      }
-    });
-
-    return () => {
-      trigger.kill();
-    };
-  }
-
-  mm.add("(min-width: 761px)", () => {
-    return createAboutScroll({
-      revealSpeed: 1.35,
-      extraMove: 24
-    });
-  });
-
-  mm.add("(max-width: 760px)", () => {
-    return createAboutScroll({
-      revealSpeed: 1.2,
-      extraMove: 34
-    });
+      updateActiveChars(activeCount);
+    },
+    onLeaveBack: () => {
+      gsap.set(aboutText, { y: 0 });
+      updateActiveChars(-1);
+    }
   });
 
   gsap.from(".about-image", {
@@ -406,6 +393,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 /* =========================
    SERVICES CARD SWAP
+   Desktop only. Mobile uses static cards for stable iPhone scrolling.
 ========================= */
 document.addEventListener("DOMContentLoaded", () => {
   if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
@@ -422,39 +410,51 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!track || !cards.length || !currentCounter) return;
 
-  const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-
-function getCardMetrics() {
   const isMobile = window.matchMedia("(max-width: 760px)").matches;
 
-  return {
-    spreadX: isMobile ? 155 : 340,
-    maxX: isMobile ? 210 : 440,
-    spreadY: isMobile ? 5 : 12,
-    rotate: isMobile ? 6 : 11,
-    scaleLoss: isMobile ? 0.12 : 0.13,
+  if (isMobile) {
+    cards.forEach((card) => {
+      gsap.set(card, { clearProps: "all" });
+    });
 
-    /* soft center lock */
-    lockZone: isMobile ? 0.34 : 0.26,
-    lockStrength: isMobile ? 0.82 : 0.78
-  };
-}
+    currentCounter.textContent = "01";
 
-function applyCenterLock(rawProgress) {
-  const metrics = getCardMetrics();
-  const nearestCard = Math.round(rawProgress);
-  const distanceToCenter = Math.abs(rawProgress - nearestCard);
+    window.addEventListener("load", () => {
+      ScrollTrigger.refresh(true);
+    });
 
-  if (distanceToCenter >= metrics.lockZone) {
-    return rawProgress;
+    return;
   }
 
-  const t = 1 - distanceToCenter / metrics.lockZone;
-  const smoothStrength = t * t * (3 - 2 * t);
-  const magneticStrength = metrics.lockStrength;
+  const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
-  return rawProgress + (nearestCard - rawProgress) * smoothStrength * magneticStrength;
-}
+  function getCardMetrics() {
+    return {
+      spreadX: 340,
+      maxX: 440,
+      spreadY: 12,
+      rotate: 11,
+      scaleLoss: 0.13,
+      lockZone: 0.26,
+      lockStrength: 0.78
+    };
+  }
+
+  function applyCenterLock(rawProgress) {
+    const metrics = getCardMetrics();
+    const nearestCard = Math.round(rawProgress);
+    const distanceToCenter = Math.abs(rawProgress - nearestCard);
+
+    if (distanceToCenter >= metrics.lockZone) {
+      return rawProgress;
+    }
+
+    const t = 1 - distanceToCenter / metrics.lockZone;
+    const smoothStrength = t * t * (3 - 2 * t);
+    const magneticStrength = metrics.lockStrength;
+
+    return rawProgress + (nearestCard - rawProgress) * smoothStrength * magneticStrength;
+  }
 
   function renderCards(rawProgress) {
     const metrics = getCardMetrics();
@@ -468,7 +468,6 @@ function applyCenterLock(rawProgress) {
       const y = abs * metrics.spreadY;
       const scale = Math.max(1 - abs * metrics.scaleLoss, 0.78);
       const rotation = relative * metrics.rotate;
-
       const isFocused = abs < 0.08;
 
       const opacity = isFocused
@@ -509,21 +508,11 @@ function applyCenterLock(rawProgress) {
     end: "bottom bottom",
     scrub: 1.2,
     invalidateOnRefresh: true,
-
     onUpdate: renderFromScroll,
     onRefresh: renderFromScroll,
-
-    onLeave: () => {
-      renderCards(cards.length - 1);
-    },
-
-    onEnterBack: (self) => {
-      renderFromScroll(self);
-    },
-
-    onLeaveBack: () => {
-      renderCards(0);
-    }
+    onLeave: () => renderCards(cards.length - 1),
+    onEnterBack: (self) => renderFromScroll(self),
+    onLeaveBack: () => renderCards(0)
   });
 
   renderCards(0);
