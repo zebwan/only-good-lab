@@ -269,8 +269,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 /* =========================
    ABOUT US STICKY TEXT REVEAL
-   Desktop only.
-   Mobile uses static text to avoid dropped frames during fast swipe.
 ========================= */
 document.addEventListener("DOMContentLoaded", () => {
   if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
@@ -281,42 +279,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const aboutText = document.querySelector("[data-about-reveal]");
   const aboutMask = document.querySelector(".about-text-mask");
   const tags = document.querySelectorAll(".about-tag");
-  const isMobile = window.matchMedia("(max-width: 760px)").matches;
 
   if (!aboutSection || !aboutText || !aboutMask) return;
-
-  /*
-    Important mobile fix:
-    Fast iPhone swipes + sticky section + hundreds of animated characters
-    will drop frames. So on mobile we keep the section readable and static.
-  */
-  if (isMobile) {
-    aboutSection.classList.add("about-mobile-static");
-    aboutText.style.color = "#047FEF";
-
-    tags.forEach((tag) => {
-      tag.style.transform = "none";
-    });
-
-    gsap.from(".about-image", {
-      y: 18,
-      opacity: 0,
-      scale: 0.97,
-      duration: 0.7,
-      ease: "power2.out",
-      scrollTrigger: {
-        trigger: aboutSection,
-        start: "top 82%",
-        once: true
-      }
-    });
-
-    window.addEventListener("load", () => {
-      ScrollTrigger.refresh(true);
-    });
-
-    return;
-  }
 
   if (!aboutText.dataset.processed) {
     const text = aboutText.textContent.trim().replace(/\s+/g, " ");
@@ -331,12 +295,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
         return `<span class="about-word">${chars}</span>`;
       })
-      .join(" ");
+      .join("");
 
     aboutText.dataset.processed = "true";
   }
 
   const chars = Array.from(aboutText.querySelectorAll(".about-char"));
+  let previousActive = -1;
+
+  function updateActiveChars(activeCount) {
+    if (activeCount === previousActive) return;
+
+    if (activeCount > previousActive) {
+      for (let i = previousActive + 1; i <= activeCount; i++) {
+        if (chars[i]) chars[i].classList.add("is-active");
+      }
+    } else {
+      for (let i = previousActive; i > activeCount; i--) {
+        if (chars[i]) chars[i].classList.remove("is-active");
+      }
+    }
+
+    previousActive = activeCount;
+  }
 
   function getDistance(extraMove) {
     const textHeight = aboutText.scrollHeight;
@@ -344,33 +325,52 @@ document.addEventListener("DOMContentLoaded", () => {
     return Math.max(0, textHeight - maskHeight + extraMove);
   }
 
-  const tl = gsap.timeline({
-    scrollTrigger: {
+  const mm = gsap.matchMedia();
+
+  function createAboutScroll(config) {
+    const trigger = ScrollTrigger.create({
       trigger: aboutSection,
       start: "top top",
       end: "bottom bottom",
       scrub: true,
       invalidateOnRefresh: true,
-      anticipatePin: 1
-    }
+      onUpdate: (self) => {
+        const progress = self.progress;
+
+        const distance = getDistance(config.extraMove);
+        gsap.set(aboutText, {
+          y: -distance * progress
+        });
+
+        const revealProgress = Math.min(progress * config.revealSpeed, 1);
+        const activeCount = Math.floor(revealProgress * (chars.length - 1));
+
+        updateActiveChars(activeCount);
+      },
+      onLeaveBack: () => {
+        gsap.set(aboutText, { y: 0 });
+        updateActiveChars(-1);
+      }
+    });
+
+    return () => {
+      trigger.kill();
+    };
+  }
+
+  mm.add("(min-width: 761px)", () => {
+    return createAboutScroll({
+      revealSpeed: 1.35,
+      extraMove: 24
+    });
   });
 
-  tl.to(aboutText, {
-    y: () => -getDistance(24),
-    duration: 1,
-    ease: "none",
-    force3D: true
-  }, 0);
-
-  tl.to(chars, {
-    color: "#047FEF",
-    duration: 0.035,
-    stagger: {
-      amount: 0.86,
-      from: "start"
-    },
-    ease: "none"
-  }, 0);
+  mm.add("(max-width: 760px)", () => {
+    return createAboutScroll({
+      revealSpeed: 1.2,
+      extraMove: 34
+    });
+  });
 
   gsap.from(".about-image", {
     y: 22,
@@ -401,13 +401,11 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   window.addEventListener("load", () => {
-    ScrollTrigger.refresh(true);
+    ScrollTrigger.refresh();
   });
 });
 /* =========================
    SERVICES CARD SWAP
-   Desktop keeps the scroll swap.
-   Mobile becomes normal stacked cards for stable 60fps touch scrolling.
 ========================= */
 document.addEventListener("DOMContentLoaded", () => {
   if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
@@ -421,84 +419,42 @@ document.addEventListener("DOMContentLoaded", () => {
     ".services-vector-left",
     ".services-vector-right"
   ]);
-  const isMobile = window.matchMedia("(max-width: 760px)").matches;
 
   if (!track || !cards.length || !currentCounter) return;
 
-  /*
-    Important mobile fix:
-    ScrollTrigger scrub + sticky + multiple glass cards is expensive on iPhone.
-    For mobile, show the same cards as a clean vertical stack instead.
-  */
-  if (isMobile) {
-    track.classList.add("services-mobile-static");
-
-    cards.forEach((card, index) => {
-      gsap.set(card, {
-        clearProps: "transform,opacity,filter,zIndex,pointerEvents",
-        opacity: 1,
-        x: 0,
-        y: 0,
-        scale: 1,
-        rotation: 0,
-        pointerEvents: "auto"
-      });
-
-      gsap.from(card, {
-        y: 22,
-        opacity: 0,
-        duration: 0.55,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: card,
-          start: "top 86%",
-          once: true
-        },
-        delay: index * 0.03
-      });
-    });
-
-    gsap.set(vectors, { opacity: 1, clearProps: "transform" });
-
-    window.addEventListener("load", () => {
-      ScrollTrigger.refresh(true);
-    });
-
-    return;
-  }
-
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
-  function getCardMetrics() {
-    return {
-      spreadX: 340,
-      maxX: 440,
-      spreadY: 12,
-      rotate: 11,
-      scaleLoss: 0.13,
-      minScale: 0.78,
-      fadeLoss: 0.42,
-      minOpacity: 0.18,
-      hideAfter: 2,
-      lockZone: 0.26,
-      lockStrength: 0.78
-    };
+function getCardMetrics() {
+  const isMobile = window.matchMedia("(max-width: 760px)").matches;
+
+  return {
+    spreadX: isMobile ? 155 : 340,
+    maxX: isMobile ? 210 : 440,
+    spreadY: isMobile ? 5 : 12,
+    rotate: isMobile ? 6 : 11,
+    scaleLoss: isMobile ? 0.12 : 0.13,
+
+    /* soft center lock */
+    lockZone: isMobile ? 0.34 : 0.26,
+    lockStrength: isMobile ? 0.82 : 0.78
+  };
+}
+
+function applyCenterLock(rawProgress) {
+  const metrics = getCardMetrics();
+  const nearestCard = Math.round(rawProgress);
+  const distanceToCenter = Math.abs(rawProgress - nearestCard);
+
+  if (distanceToCenter >= metrics.lockZone) {
+    return rawProgress;
   }
 
-  function applyCenterLock(rawProgress) {
-    const metrics = getCardMetrics();
-    const nearestCard = Math.round(rawProgress);
-    const distanceToCenter = Math.abs(rawProgress - nearestCard);
+  const t = 1 - distanceToCenter / metrics.lockZone;
+  const smoothStrength = t * t * (3 - 2 * t);
+  const magneticStrength = metrics.lockStrength;
 
-    if (distanceToCenter >= metrics.lockZone) {
-      return rawProgress;
-    }
-
-    const t = 1 - distanceToCenter / metrics.lockZone;
-    const smoothStrength = t * t * (3 - 2 * t);
-
-    return rawProgress + (nearestCard - rawProgress) * smoothStrength * metrics.lockStrength;
-  }
+  return rawProgress + (nearestCard - rawProgress) * smoothStrength * magneticStrength;
+}
 
   function renderCards(rawProgress) {
     const metrics = getCardMetrics();
@@ -510,15 +466,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const x = clamp(relative * metrics.spreadX, -metrics.maxX, metrics.maxX);
       const y = abs * metrics.spreadY;
-      const scale = Math.max(1 - abs * metrics.scaleLoss, metrics.minScale);
+      const scale = Math.max(1 - abs * metrics.scaleLoss, 0.78);
       const rotation = relative * metrics.rotate;
+
       const isFocused = abs < 0.08;
 
       const opacity = isFocused
         ? 1
-        : abs > metrics.hideAfter
+        : abs > 2
           ? 0
-          : Math.max(1 - abs * metrics.fadeLoss, metrics.minOpacity);
+          : Math.max(1 - abs * 0.42, 0.18);
 
       const zIndex = isFocused ? 200 : 100 - Math.round(abs * 20);
 
@@ -529,9 +486,7 @@ document.addEventListener("DOMContentLoaded", () => {
         rotation,
         opacity,
         zIndex,
-        pointerEvents: isFocused ? "auto" : "none",
-        filter: "none",
-        force3D: true
+        filter: "none"
       });
     });
 
@@ -554,17 +509,28 @@ document.addEventListener("DOMContentLoaded", () => {
     end: "bottom bottom",
     scrub: 1.2,
     invalidateOnRefresh: true,
-    anticipatePin: 1,
+
     onUpdate: renderFromScroll,
     onRefresh: renderFromScroll,
-    onLeave: () => renderCards(cards.length - 1),
-    onEnterBack: renderFromScroll,
-    onLeaveBack: () => renderCards(0)
+
+    onLeave: () => {
+      renderCards(cards.length - 1);
+    },
+
+    onEnterBack: (self) => {
+      renderFromScroll(self);
+    },
+
+    onLeaveBack: () => {
+      renderCards(0);
+    }
   });
 
   renderCards(0);
 
-  gsap.set(vectors, { opacity: 1 });
+  gsap.set(vectors, {
+    opacity: 1
+  });
 
   vectors.forEach((vector, index) => {
     gsap.to(vector, {
