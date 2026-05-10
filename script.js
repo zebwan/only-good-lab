@@ -15,8 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
   let rafId = null;
   let isAnimating = false;
 
-const ease = 0.03;
-const wheelStrength = 1.1;
+const ease = 0.085;
+const wheelStrength = 1.04;
 
   function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
@@ -269,7 +269,8 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 /* =========================
    ABOUT US STICKY TEXT REVEAL
-   Mobile-optimised: smoother GSAP tween instead of class toggling on scroll
+   Desktop only.
+   Mobile uses static text to avoid dropped frames during fast swipe.
 ========================= */
 document.addEventListener("DOMContentLoaded", () => {
   if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
@@ -280,8 +281,42 @@ document.addEventListener("DOMContentLoaded", () => {
   const aboutText = document.querySelector("[data-about-reveal]");
   const aboutMask = document.querySelector(".about-text-mask");
   const tags = document.querySelectorAll(".about-tag");
+  const isMobile = window.matchMedia("(max-width: 760px)").matches;
 
   if (!aboutSection || !aboutText || !aboutMask) return;
+
+  /*
+    Important mobile fix:
+    Fast iPhone swipes + sticky section + hundreds of animated characters
+    will drop frames. So on mobile we keep the section readable and static.
+  */
+  if (isMobile) {
+    aboutSection.classList.add("about-mobile-static");
+    aboutText.style.color = "#047FEF";
+
+    tags.forEach((tag) => {
+      tag.style.transform = "none";
+    });
+
+    gsap.from(".about-image", {
+      y: 18,
+      opacity: 0,
+      scale: 0.97,
+      duration: 0.7,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: aboutSection,
+        start: "top 82%",
+        once: true
+      }
+    });
+
+    window.addEventListener("load", () => {
+      ScrollTrigger.refresh(true);
+    });
+
+    return;
+  }
 
   if (!aboutText.dataset.processed) {
     const text = aboutText.textContent.trim().replace(/\s+/g, " ");
@@ -309,71 +344,33 @@ document.addEventListener("DOMContentLoaded", () => {
     return Math.max(0, textHeight - maskHeight + extraMove);
   }
 
-  const mm = gsap.matchMedia();
-
-  function createAboutScroll(config) {
-    gsap.set(aboutText, {
-      y: 0,
-      force3D: true
-    });
-
-    gsap.set(chars, {
-      color: "#d8dee7"
-    });
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: aboutSection,
-        start: "top top",
-        end: "bottom bottom",
-        scrub: config.scrub,
-        invalidateOnRefresh: true,
-        anticipatePin: 1
-      }
-    });
-
-    tl.to(aboutText, {
-      y: () => -getDistance(config.extraMove),
-      duration: 1,
-      ease: "none",
-      force3D: true
-    }, 0);
-
-    tl.to(chars, {
-      color: "#047FEF",
-      duration: config.charDuration,
-      stagger: {
-        amount: config.revealAmount,
-        from: "start"
-      },
-      ease: "none"
-    }, 0);
-
-    return () => {
-      if (tl.scrollTrigger) tl.scrollTrigger.kill();
-      tl.kill();
-      gsap.set(aboutText, { clearProps: "y" });
-      gsap.set(chars, { clearProps: "color" });
-    };
-  }
-
-  mm.add("(min-width: 761px)", () => {
-    return createAboutScroll({
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: aboutSection,
+      start: "top top",
+      end: "bottom bottom",
       scrub: true,
-      revealAmount: 0.86,
-      charDuration: 0.035,
-      extraMove: 24
-    });
+      invalidateOnRefresh: true,
+      anticipatePin: 1
+    }
   });
 
-  mm.add("(max-width: 760px)", () => {
-    return createAboutScroll({
-      scrub: 0.28,
-      revealAmount: 0.72,
-      charDuration: 0.02,
-      extraMove: 18
-    });
-  });
+  tl.to(aboutText, {
+    y: () => -getDistance(24),
+    duration: 1,
+    ease: "none",
+    force3D: true
+  }, 0);
+
+  tl.to(chars, {
+    color: "#047FEF",
+    duration: 0.035,
+    stagger: {
+      amount: 0.86,
+      from: "start"
+    },
+    ease: "none"
+  }, 0);
 
   gsap.from(".about-image", {
     y: 22,
@@ -388,18 +385,16 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   tags.forEach((tag, index) => {
-    const isMobile = window.matchMedia("(max-width: 760px)").matches;
-
     gsap.to(tag, {
-      x: isMobile ? (index % 2 === 0 ? 6 : -6) : (index % 2 === 0 ? 32 : -32),
-      y: isMobile ? (index % 2 === 0 ? -5 : 5) : (index % 2 === 0 ? -22 : 22),
-      rotate: isMobile ? (index % 2 === 0 ? 1 : -1) : (index % 2 === 0 ? 2 : -2),
+      x: index % 2 === 0 ? 32 : -32,
+      y: index % 2 === 0 ? -22 : 22,
+      rotate: index % 2 === 0 ? 2 : -2,
       ease: "none",
       scrollTrigger: {
         trigger: aboutSection,
         start: "top bottom",
         end: "bottom top",
-        scrub: isMobile ? 0.25 : true,
+        scrub: true,
         invalidateOnRefresh: true
       }
     });
@@ -411,7 +406,8 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 /* =========================
    SERVICES CARD SWAP
-   Mobile-optimised: stacked centre cards instead of wide side spread
+   Desktop keeps the scroll swap.
+   Mobile becomes normal stacked cards for stable 60fps touch scrolling.
 ========================= */
 document.addEventListener("DOMContentLoaded", () => {
   if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
@@ -425,29 +421,67 @@ document.addEventListener("DOMContentLoaded", () => {
     ".services-vector-left",
     ".services-vector-right"
   ]);
+  const isMobile = window.matchMedia("(max-width: 760px)").matches;
 
   if (!track || !cards.length || !currentCounter) return;
 
+  /*
+    Important mobile fix:
+    ScrollTrigger scrub + sticky + multiple glass cards is expensive on iPhone.
+    For mobile, show the same cards as a clean vertical stack instead.
+  */
+  if (isMobile) {
+    track.classList.add("services-mobile-static");
+
+    cards.forEach((card, index) => {
+      gsap.set(card, {
+        clearProps: "transform,opacity,filter,zIndex,pointerEvents",
+        opacity: 1,
+        x: 0,
+        y: 0,
+        scale: 1,
+        rotation: 0,
+        pointerEvents: "auto"
+      });
+
+      gsap.from(card, {
+        y: 22,
+        opacity: 0,
+        duration: 0.55,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: card,
+          start: "top 86%",
+          once: true
+        },
+        delay: index * 0.03
+      });
+    });
+
+    gsap.set(vectors, { opacity: 1, clearProps: "transform" });
+
+    window.addEventListener("load", () => {
+      ScrollTrigger.refresh(true);
+    });
+
+    return;
+  }
+
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-  const isMobileView = () => window.matchMedia("(max-width: 760px)").matches;
 
   function getCardMetrics() {
-    const isMobile = isMobileView();
-
     return {
-      spreadX: isMobile ? 18 : 340,
-      maxX: isMobile ? 34 : 440,
-      spreadY: isMobile ? 22 : 12,
-      rotate: isMobile ? 0 : 11,
-      scaleLoss: isMobile ? 0.055 : 0.13,
-      minScale: isMobile ? 0.88 : 0.78,
-      fadeLoss: isMobile ? 0.72 : 0.42,
-      minOpacity: isMobile ? 0.12 : 0.18,
-      hideAfter: isMobile ? 1.45 : 2,
-
-      /* soft center lock */
-      lockZone: isMobile ? 0.24 : 0.26,
-      lockStrength: isMobile ? 0.58 : 0.78
+      spreadX: 340,
+      maxX: 440,
+      spreadY: 12,
+      rotate: 11,
+      scaleLoss: 0.13,
+      minScale: 0.78,
+      fadeLoss: 0.42,
+      minOpacity: 0.18,
+      hideAfter: 2,
+      lockZone: 0.26,
+      lockStrength: 0.78
     };
   }
 
@@ -518,44 +552,30 @@ document.addEventListener("DOMContentLoaded", () => {
     trigger: track,
     start: "top top",
     end: "bottom bottom",
-    scrub: isMobileView() ? 0.18 : 1.2,
+    scrub: 1.2,
     invalidateOnRefresh: true,
     anticipatePin: 1,
-
     onUpdate: renderFromScroll,
     onRefresh: renderFromScroll,
-
-    onLeave: () => {
-      renderCards(cards.length - 1);
-    },
-
-    onEnterBack: (self) => {
-      renderFromScroll(self);
-    },
-
-    onLeaveBack: () => {
-      renderCards(0);
-    }
+    onLeave: () => renderCards(cards.length - 1),
+    onEnterBack: renderFromScroll,
+    onLeaveBack: () => renderCards(0)
   });
 
   renderCards(0);
 
-  gsap.set(vectors, {
-    opacity: 1
-  });
+  gsap.set(vectors, { opacity: 1 });
 
   vectors.forEach((vector, index) => {
-    const isMobile = isMobileView();
-
     gsap.to(vector, {
-      y: isMobile ? (index === 0 ? -6 : 6) : (index === 0 ? -18 : 18),
-      x: isMobile ? (index === 0 ? 4 : -4) : (index === 0 ? 10 : -10),
+      y: index === 0 ? -18 : 18,
+      x: index === 0 ? 10 : -10,
       ease: "none",
       scrollTrigger: {
         trigger: track,
         start: "top bottom",
         end: "bottom top",
-        scrub: isMobile ? 0.25 : true,
+        scrub: true,
         invalidateOnRefresh: true
       }
     });
