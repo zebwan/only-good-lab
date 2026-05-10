@@ -16,8 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
   let isAnimating = false;
 
 
-const ease = 0.03;
-const wheelStrength = 1.1;
+const ease = 0.085;
+const wheelStrength = 1.04;
 
   function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
