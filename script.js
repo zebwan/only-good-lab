@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let rafId = null;
   let isAnimating = false;
 
-
 const ease = 0.085;
 const wheelStrength = 1.04;
 
