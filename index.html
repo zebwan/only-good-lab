@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Only Good Lab</title>
+
+  <!-- Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+ <link rel="stylesheet" href="style.css" />
+
+
+  <!-- GSAP -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+ <script defer src="script.js"></script>
+</head>
+<body class="intro-lock">
+<!-- INTRO SCREEN -->
+<div class="site-intro" id="siteIntro">
+  <div class="intro-glow intro-glow-one"></div>
+  <div class="intro-glow intro-glow-two"></div>
+
+  <div class="intro-content">
+    <div class="intro-logo-wrap">
+      <img src="img/intro-logo.png" alt="Only Good Lab Logo" class="intro-logo">
+    </div>
+
+    <h1 class="intro-title">Only Good Lab</h1>
+  </div>
+</div>
+
+  <main>
+  <section class="hero-section">
+    <div class="hero-card" id="heroCard">
+
+      <div class="hero-media layer" data-depth="0.12">
+        <img src="img/hero-main.png" alt="Hero Background" />
+      </div>
+
+      <div class="hero-overlay"></div>
+      <div class="hero-grid"></div>
+
+      <div class="hero-glow hero-glow-one layer" data-depth="0.06"></div>
+      <div class="hero-glow hero-glow-two layer" data-depth="0.09"></div>
+
+     
+      <!-- NAVBAR INSIDE HERO -->
+      <header class="site-header">
+        <div class="nav-shell">
+          <a href="#" class="brand">
+            <img src="img/logo.png" alt="Only Good Lab Logo" />
+          </a>
+
+      <nav class="nav-links" id="navLinks">
+  <a href="#" class="is-active">Home</a>
+  <a href="#about">About Us</a>
+  <a href="#services">Service</a>
+  <a href="#our-work">Our Work</a>
+</nav>
+
+          <div class="nav-actions">
+<a href="#contact" class="contact-btn magnetic">Discovery Session</a>            <button class="menu-toggle" id="menuToggle" aria-label="Open Menu">
+              <span></span>
+              <span></span>
+            </button>
+          </div>
+        </div>
+      </header>
+<div class="hero-content">
+  <div class="hero-slider" aria-label="Only Good Lab hero messages">
+
+    <article class="hero-slide is-active" data-hero-slide>
+      <p class="hero-eyebrow reveal-up">Digital Creative Studio</p>
+
+      <h1 class="hero-title hero-title-brand">
+        <span class="title-line">Only Good Lab</span>
+      </h1>
+
+      <p class="hero-slide-copy reveal-up">
+        Only good ideas, built to be seen.
+      </p>
+
+      <div class="hero-actions reveal-up">
+        <a href="#our-work" class="hero-cta magnetic">
+          <span>Our Work</span>
+        </a>
+      </div>
+    </article>
+
+    <article class="hero-slide" data-hero-slide>
+      <p class="hero-eyebrow">What We Do</p>
+
+      <h2 class="hero-statement">
+        We craft <strong>branding</strong>, <strong>social content</strong>, and
+        <span class="linked-word">websites</span> that help businesses look sharper,
+        launch better, and stand out online.
+      </h2>
+
+      <div class="hero-actions">
+        <a href="#our-work" class="hero-cta magnetic">
+          <span>Our Work</span>
+        </a>
+      </div>
+    </article>
+
+    <article class="hero-slide" data-hero-slide>
+      <p class="hero-eyebrow">Built With Direction</p>
+
+      <h2 class="hero-statement">
+        From first look to full launch, we <span class="linked-word">build</span>
+        digital work that feels <strong>clear</strong>, connected, and ready to grow.
+      </h2>
+
+      <div class="hero-actions">
+        <a href="#our-work" class="hero-cta magnetic">
+          <span>Our Work</span>
+        </a>
+      </div>
+    </article>
+
+    <div class="hero-slider-dots" aria-hidden="true">
+      <span class="is-active" data-hero-dot></span>
+      <span data-hero-dot></span>
+      <span data-hero-dot></span>
+    </div>
+  </div>
+</div>
+
+      
+
+    </div>
+  </section>
+<!-- ABOUT US -->
+<section class="about-section" id="about">
+  <div class="about-pin">
+
+    <div class="about-decor" aria-hidden="true">
+      <div class="about-tag tag-one">Purpose over noise</div>
+      <div class="about-tag tag-two">Built with clarity</div>
+      <div class="about-tag tag-three">Modern but useful</div>
+      <div class="about-tag tag-four">Design with direction</div>
+      <div class="about-tag tag-five">Sharp, not loud</div>
+      <div class="about-tag tag-six">Strategy first</div>
+      <div class="about-tag tag-seven">Less clutter</div>
+      <div class="about-tag tag-eight">Good work only</div>
+      <div class="about-tag tag-nine">Clean execution</div>
+      <div class="about-tag tag-ten">Digital that works</div>
+    </div>
+
+    <!-- Mobile label only -->
+    <p class="about-label about-label-mobile">About Us</p>
+
+    <div class="about-layout">
+
+      <div class="about-visual-wrap">
+        <picture>
+          <source srcset="img/about-mobile.png" media="(max-width: 760px)">
+          <img src="img/about.png" alt="Only Good Lab creative team" class="about-image">
+        </picture>
+      </div>
+
+      <div class="about-text-area">
+        <!-- Desktop label only -->
+        <p class="about-label about-label-desktop">About Us</p>
+
+        <div class="about-text-mask">
+          <h2 class="about-statement" data-about-reveal>
+            Only Good Lab is a digital creative studio defined by clarity and structure. We deliver purposeful branding, design, and strategic content to keep brands effective, modern, and reliable. Every project is shaped with intention — balancing design, communication, and direction so the final outcome feels clean, memorable, and built to last.
+          </h2>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+<!-- SERVICES -->
+<section class="services-section" id="services">
+  <div class="services-shell">
+    <div class="services-intro">
+      <p class="services-label">Services</p>
+      <h2 class="services-title">What we can help you build.</h2>
+    </div>
+  </div>
+
+  <div class="services-scroll-track">
+    <div class="services-sticky">
+      <img src="img/vector1.png" alt="" class="services-vector services-vector-left" aria-hidden="true">
+      <img src="img/vector2.png" alt="" class="services-vector services-vector-right" aria-hidden="true">
+
+      <div class="services-stage-meta">
+        <span class="services-stage-counter">
+          <span class="services-current">01</span><span class="services-total">/05</span>
+        </span>
+      </div>
+
+      <div class="services-stage">
+        <article class="service-swap-card" data-service-card>
+          <div class="service-swap-top">
+            <span class="service-mini-no">01</span>
+            <span class="service-mini-badge">Branding</span>
+          </div>
+
+          <div class="service-swap-logo">Only Good Lab</div>
+
+          <div class="service-swap-body">
+            <h3>Brand Identity & Design</h3>
+            <p>
+              Logos, visual direction, brand systems, and assets that make your
+              business feel polished, recognisable, and more aligned.
+            </p>
+          </div>
+
+          <div class="service-swap-tags">
+            <span>Logo Design</span>
+            <span>Brand System</span>
+            <span>Visual Assets</span>
+          </div>
+
+          <div class="service-swap-footer">
+            <span>01</span>
+            <span>Identity</span>
+          </div>
+        </article>
+
+        <article class="service-swap-card" data-service-card>
+          <div class="service-swap-top">
+            <span class="service-mini-no">02</span>
+            <span class="service-mini-badge">Content</span>
+          </div>
+
+          <div class="service-swap-logo">Only Good Lab</div>
+
+          <div class="service-swap-body">
+            <h3>Social Content Creation</h3>
+            <p>
+              Content planning and visual posts designed to help your brand stay
+              active, engaging, and consistent across social platforms.
+            </p>
+          </div>
+
+          <div class="service-swap-tags">
+           
+            <span>Creative Direction</span>
+            <span>Content Planning</span>
+          </div>
+
+          <div class="service-swap-footer">
+            <span>02</span>
+            <span>Social</span>
+          </div>
+        </article>
+
+        <article class="service-swap-card" data-service-card>
+          <div class="service-swap-top">
+            <span class="service-mini-no">03</span>
+            <span class="service-mini-badge">Web</span>
+          </div>
+
+          <div class="service-swap-logo">Only Good Lab</div>
+
+          <div class="service-swap-body">
+            <h3>Website Design & Development</h3>
+            <p>
+              Landing pages and websites that feel modern, user-friendly, and aligned
+              with your brand identity from top to bottom.
+            </p>
+          </div>
+
+          <div class="service-swap-tags">
+            <span>Landing Pages</span>
+            <span>UI Design</span>
+            <span>Development</span>
+          </div>
+
+          <div class="service-swap-footer">
+            <span>03</span>
+            <span>Website</span>
+          </div>
+        </article>
+
+        <article class="service-swap-card" data-service-card>
+          <div class="service-swap-top">
+            <span class="service-mini-no">04</span>
+            <span class="service-mini-badge">Management</span>
+          </div>
+
+          <div class="service-swap-logo">Only Good Lab</div>
+
+          <div class="service-swap-body">
+            <h3>Content Management</h3>
+            <p>
+              We help organise, maintain, and structure your digital content so your
+              brand communicates clearly and consistently.
+            </p>
+          </div>
+
+          <div class="service-swap-tags">
+            <span>Content Structure</span>
+            <span>Consistency</span>
+            <span>Organisation</span>
+          </div>
+
+          <div class="service-swap-footer">
+            <span>04</span>
+            <span>Management</span>
+          </div>
+        </article>
+
+        <article class="service-swap-card" data-service-card>
+          <div class="service-swap-top">
+            <span class="service-mini-no">05</span>
+            <span class="service-mini-badge">Strategy</span>
+          </div>
+
+          <div class="service-swap-logo">Only Good Lab</div>
+
+          <div class="service-swap-body">
+            <h3>Digital Strategy & Direction</h3>
+            <p>
+              Need direction before execution? We shape ideas into a clearer path
+              so your branding, content, and website work together properly.
+            </p>
+          </div>
+
+          <div class="service-swap-tags">
+            <span>Strategy</span>
+            <span>Planning</span>
+            <span>Creative Direction</span>
+          </div>
+
+          <div class="service-swap-footer">
+            <span>05</span>
+            <span>Direction</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- RATE CARDS -->
+<section class="rate-section" id="rate-cards">
+  <div class="rate-shell">
+    <div class="rate-header">
+      <p class="rate-label">Rate Cards</p>
+      <h2 class="rate-title" data-rate-title>Social Media Management</h2>
+     
+    </div>
+
+    <div class="rate-slider-wrap">
+    <button class="rate-nav rate-prev" type="button" aria-label="Previous" data-rate-dir="prev">
+  &lt;
+</button>
+
+      <div class="rate-viewport">
+        <div class="rate-track" data-rate-track>
+
+          <!-- PANEL 1 -->
+          <div class="rate-panel is-active" data-rate-panel data-category="Social Media Management">
+            <article class="rate-card">
+              <div class="rate-card-top">
+                <span class="rate-number">01</span>
+                <span class="rate-badge">Starter</span>
+              </div>
+              <div class="rate-card-body">
+                <h3>Starter Formula</h3>
+                <p>Best for brands building a consistent online presence.</p>
+              </div>
+              <ul class="rate-list">
+                <li>All Meta Platforms (IG & FB)</li>
+                <li>6 feed posts per month</li>
+                <li>1 short-form video / Reel</li>
+                <li>2 Ad Campaigns, Setup & Management</li>
+                <li>Monthly performance report</li>
+              </ul>
+              <div class="rate-price">RM1,500</div>
+            </article>
+
+            <article class="rate-card is-featured">
+              <div class="rate-card-top">
+                <span class="rate-number">02</span>
+                <span class="rate-badge">Popular</span>
+              </div>
+              <div class="rate-card-body">
+                <h3>Growth Formula</h3>
+                <p>Best for brands ready to grow visibility and engagement.</p>
+              </div>
+              <ul class="rate-list">
+                <li>All Meta Platforms (IG & FB)</li>
+                <li>9 feed posts per month</li>
+                <li>3 short-form videos / Reels</li>
+                <li>3 Ad Campaigns, Setup & Management</li>
+                <li>Monthly insight and optimisation</li>
+              </ul>
+              <div class="rate-price">RM2,500</div>
+            </article>
+
+            <article class="rate-card">
+              <div class="rate-card-top">
+                <span class="rate-number">03</span>
+                <span class="rate-badge">Advanced</span>
+              </div>
+              <div class="rate-card-body">
+                <h3>Advanced Formula</h3>
+                <p>Best for brands focused on momentum and results.</p>
+              </div>
+              <ul class="rate-list">
+                <li>All Meta Platforms (IG & FB)</li>
+                <li>12 feed posts per month</li>
+                <li>5 short-form videos / Reels</li>
+                <li>4 Ad Campaigns, Setup & Management</li>
+                <li>Monthly strategy review</li>
+              </ul>
+              <div class="rate-price">RM3,500</div>
+            </article>
+          </div>
+
+          <!-- PANEL 2 -->
+          <div class="rate-panel" data-rate-panel data-category="Traffic & Leads Management">
+            <article class="rate-card">
+              <div class="rate-card-top">
+                <span class="rate-number">01</span>
+                <span class="rate-badge">Starter</span>
+              </div>
+              <div class="rate-card-body">
+                <h3>Starter System</h3>
+                <p>Brands testing paid ads with a performance-first approach.</p>
+              </div>
+              <ul class="rate-list">
+                <li>1 Ad Campaign</li>
+                <li>2 Audience Targeting</li>
+                <li>3 Ad Creatives (image/video)</li>
+                <li>Campaign Setup & Tracking</li>
+                <li>Basic Monitoring</li>
+              </ul>
+              <div class="rate-price">RM500</div>
+            </article>
+
+            <article class="rate-card is-featured">
+              <div class="rate-card-top">
+                <span class="rate-number">02</span>
+                <span class="rate-badge">Growth</span>
+              </div>
+              <div class="rate-card-body">
+                <h3>Growth System</h3>
+                <p>Brands scaling paid ads with consistent optimisation.</p>
+              </div>
+              <ul class="rate-list">
+                <li>2 Ad Campaigns</li>
+                <li>4 Audience Targeting</li>
+                <li>5 Ad Creatives (image/video)</li>
+                <li>Campaign Setup & Optimisation</li>
+                <li>Weekly Monitoring</li>
+              </ul>
+              <div class="rate-price">RM1,200</div>
+            </article>
+
+            <article class="rate-card">
+              <div class="rate-card-top">
+                <span class="rate-number">03</span>
+                <span class="rate-badge">Advanced</span>
+              </div>
+              <div class="rate-card-body">
+                <h3>Advanced System</h3>
+                <p>Brands focused on scaling performance and results.</p>
+              </div>
+              <ul class="rate-list">
+                <li>3 Ad Campaigns</li>
+                <li>6 Audience Targeting</li>
+                <li>7 Ad Creatives (image/video)</li>
+                <li>Full Funnel Setup</li>
+                <li>Ongoing Optimisation</li>
+              </ul>
+              <div class="rate-price">RM2,000</div>
+            </article>
+          </div>
+
+          <!-- PANEL 3 -->
+          <div class="rate-panel" data-rate-panel data-category="Web Design Development">
+            <article class="rate-card">
+              <div class="rate-card-top">
+                <span class="rate-number">01</span>
+                <span class="rate-badge">Landing</span>
+              </div>
+              <div class="rate-card-body">
+                <h3>Landing Page</h3>
+                <p>Low cost and every click becomes your customer lead.</p>
+              </div>
+              <ul class="rate-list">
+                <li>One-page website</li>
+                <li>Copy guidance</li>
+                <li>Mobile optimisation</li>
+                <li>Layout and structure planning</li>
+                <li>Customer inquiry form</li>
+              </ul>
+              <div class="rate-price">RM1,250</div>
+            </article>
+
+            <article class="rate-card is-featured">
+              <div class="rate-card-top">
+                <span class="rate-number">02</span>
+                <span class="rate-badge">CMS</span>
+              </div>
+              <div class="rate-card-body">
+                <h3>Custom CMS Page</h3>
+                <p>Brands that value flexibility and editable content.</p>
+              </div>
+              <ul class="rate-list">
+                <li>Up to 5 pages</li>
+                <li>Easily editable layout</li>
+                <li>Fully custom CMS design</li>
+                <li>Dynamic content zones</li>
+                <li>CRM & automation integration</li>
+              </ul>
+              <div class="rate-price">RM2,200</div>
+            </article>
+
+            <article class="rate-card">
+              <div class="rate-card-top">
+                <span class="rate-number">03</span>
+                <span class="rate-badge">Ecomm</span>
+              </div>
+              <div class="rate-card-body">
+                <h3>Ecomm Website</h3>
+                <p>High investment, but you own your brand and your data.</p>
+              </div>
+              <ul class="rate-list">
+                <li>Up to 10 pages</li>
+                <li>CMS-ready build</li>
+                <li>Order & inventory management</li>
+                <li>Payment gateway integration</li>
+                <li>Multi-product inventory system</li>
+              </ul>
+              <div class="rate-price">RM3,200</div>
+            </article>
+          </div>
+
+        </div>
+      </div>
+
+    <button class="rate-nav rate-next" type="button" aria-label="Next" data-rate-dir="next">
+  &gt;
+</button>
+    </div>
+  </div>
+</section>
+<!-- OUR WORK -->
+<section class="work-section" id="our-work">
+  <div class="work-header">
+    <p class="work-label">Our Work</p>
+    <h2 class="work-title">Web works we have shaped.</h2>
+  </div>
+
+  <div class="work-stack">
+
+    <article class="work-project" style="--i: 1;">
+      <div class="work-card">
+        <video src="img/valehouseogl.mp4" autoplay muted loop playsinline preload="metadata"></video>
+
+        <h3 class="work-project-name">Valehouse Estates</h3>
+
+        <a href="https://zebwan.github.io/valehouse-estates/" target="_blank" class="work-live-btn">
+          View Live
+        </a>
+      </div>
+    </article>
+
+    <article class="work-project" style="--i: 2;">
+      <div class="work-card">
+        <video src="img/motosakaogl.mp4" autoplay muted loop playsinline preload="metadata"></video>
+
+        <h3 class="work-project-name">Motosaka Detailing</h3>
+
+        <a href="https://motosakadetailing.com" target="_blank" class="work-live-btn">
+          View Live
+        </a>
+      </div>
+    </article>
+
+    <article class="work-project" style="--i: 3;">
+      <div class="work-card">
+        <video src="img/geraldkongogl.mp4" autoplay muted loop playsinline preload="metadata"></video>
+
+        <h3 class="work-project-name">Gerald Kong Academy</h3>
+
+        <a href="https://geraldkongacademy.com" target="_blank" class="work-live-btn">
+          View Live
+        </a>
+      </div>
+    </article>
+
+    <article class="work-project" style="--i: 4;">
+      <div class="work-card">
+        <video src="img/rightsideogl.mp4" autoplay muted loop playsinline preload="metadata"></video>
+
+        <h3 class="work-project-name">Rightside</h3>
+
+        <a href="https://zebwan.github.io/rightside-my/" target="_blank" class="work-live-btn">
+          View Live
+        </a>
+      </div>
+    </article>
+
+    <article class="work-project" style="--i: 5;">
+      <div class="work-card">
+        <video src="img/perundingogl.mp4" autoplay muted loop playsinline preload="metadata"></video>
+
+        <h3 class="work-project-name">Perunding Ihsan</h3>
+
+        <a href="https://zebwan.github.io/perunding-ihsan/" target="_blank" class="work-live-btn">
+          View Live
+        </a>
+      </div>
+    </article>
+
+    <article class="work-project" style="--i: 6;">
+      <div class="work-card">
+        <video src="img/modernthreadsogl.mp4" autoplay muted loop playsinline preload="metadata"></video>
+
+        <h3 class="work-project-name">Modern Threads</h3>
+
+        <a href="https://zebwan.github.io/modern-threads/" target="_blank" class="work-live-btn">
+          View Live
+        </a>
+      </div>
+    </article>
+
+  </div>
+</section>
+<!-- PROCESS -->
+<section class="process-section" id="process">
+  <div class="process-scroll-track">
+    <div class="process-sticky">
+      <div class="process-frame">
+
+        <div class="process-top">
+          <span>How We Work</span>
+        
+        </div>
+
+        <div class="process-arrow-tab" aria-hidden="true">
+          <span>→</span>
+        </div>
+
+        <div class="process-slides">
+
+          <article class="process-step">
+            <span class="process-bg-number">01</span>
+            <div class="process-content">
+              <h2>It starts with an <span class="process-sketch">inquiry.</span></h2>
+              <p>
+                Whether through WhatsApp, Instagram DM, our website, or referrals —
+                we first understand your business, goals, and current challenges.
+              </p>
+            </div>
+          </article>
+
+          <article class="process-step">
+            <span class="process-bg-number">02</span>
+            <div class="process-content">
+              <h2>We schedule a discovery session.</h2>
+              <p>
+                This is where we identify your objectives, target audience, offers,
+                brand position, and the best strategy moving forward.
+              </p>
+            </div>
+          </article>
+
+          <article class="process-step">
+            <span class="process-bg-number">03</span>
+            <div class="process-content">
+              <h2>
+                You receive a clear proposal with recommended
+                <span class="process-soft">services, pricing, and deliverables.</span>
+              </h2>
+              <p>
+                For selected projects, we may also provide initial concepts or mockups
+                to align direction before execution.
+              </p>
+            </div>
+          </article>
+
+          <article class="process-step">
+            <span class="process-bg-number">04</span>
+            <div class="process-content">
+              <h2>We align the direction before building.</h2>
+              <p>
+                We refine the visual direction, content flow, structure, and priorities
+                so the project has a clear foundation before production starts.
+              </p>
+            </div>
+          </article>
+
+          <article class="process-step">
+            <span class="process-bg-number">05</span>
+            <div class="process-content">
+              <h2>You’ll be onboarded into our workflow.</h2>
+              <p>
+                This includes collecting brand assets, setting communication channels,
+                access permissions, timelines, and project planning.
+              </p>
+            </div>
+          </article>
+
+          <article class="process-step">
+            <span class="process-bg-number">06</span>
+            <div class="process-content">
+              <h2>We begin buil<span class="process-uppercase">DING.</span></h2>
+              <p>
+                From content creation and ad campaigns to websites and strategy
+                implementation — every step is structured around performance, clarity,
+                and consistency.
+              </p>
+            </div>
+          </article>
+
+        </div>
+
+        <div class="process-bottom">
+          <div class="process-count">
+            <span data-process-current>01</span>
+            <span>/06</span>
+          </div>
+
+          <div class="process-progress">
+            <span data-process-progress></span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+<!-- FAQ -->
+<section class="faq-section" id="faq">
+  <div class="faq-shell">
+    <div class="faq-copy">
+      <p class="faq-label">FAQ</p>
+
+      <h2 class="faq-title">
+        Frequently asked
+        <span>questions.</span>
+      </h2>
+
+     
+    </div>
+
+    <div class="faq-list">
+
+      <article class="faq-item">
+        <button class="faq-question" type="button">
+          <span>How do we start a project with Only Good Lab?</span>
+          <span class="faq-icon">+</span>
+        </button>
+
+        <div class="faq-answer">
+          <p>
+            It usually starts with a simple inquiry through WhatsApp, Instagram, email, or our website.
+            From there, we understand your business, goals, budget, and the kind of support you need.
+          </p>
+        </div>
+      </article>
+
+      <article class="faq-item">
+        <button class="faq-question" type="button">
+          <span>Can I combine website, branding, and social media services?</span>
+          <span class="faq-icon">+</span>
+        </button>
+
+        <div class="faq-answer">
+          <p>
+            Yes. Some clients only need a landing page, while others need a complete digital setup.
+            We can combine web design, brand direction, content planning, and social media management
+            based on what makes sense for your brand.
+          </p>
+        </div>
+      </article>
+
+      <article class="faq-item">
+        <button class="faq-question" type="button">
+          <span>How long does a website or campaign usually take?</span>
+          <span class="faq-icon">+</span>
+        </button>
+
+        <div class="faq-answer">
+          <p>
+            Simple landing pages can move faster, while CMS, e-commerce, or full campaign work needs
+            more planning. Timeline depends on project size, content readiness, feedback speed, and
+            the final deliverables.
+          </p>
+        </div>
+      </article>
+
+      <article class="faq-item">
+        <button class="faq-question" type="button">
+          <span>Do I need to prepare content, photos, or copywriting first?</span>
+          <span class="faq-icon">+</span>
+        </button>
+
+        <div class="faq-answer">
+          <p>
+            Not necessarily. If you already have assets, we can work with them. If not, we can help
+            structure your content, guide the copy, suggest visuals, and create a clearer direction
+            before the design starts.
+          </p>
+        </div>
+      </article>
+
+      <article class="faq-item">
+        <button class="faq-question" type="button">
+          <span>Do you manage social media and ads monthly?</span>
+          <span class="faq-icon">+</span>
+        </button>
+
+        <div class="faq-answer">
+          <p>
+            Yes. We offer monthly support for social media content, campaign setup, ad creatives,
+            performance tracking, and optimisation. The scope depends on the package or custom plan.
+          </p>
+        </div>
+      </article>
+
+      <article class="faq-item">
+        <button class="faq-question" type="button">
+          <span>Will I get revisions and support after launch?</span>
+          <span class="faq-icon">+</span>
+        </button>
+
+        <div class="faq-answer">
+          <p>
+            Yes. Every project includes a review and refinement stage before final delivery. For websites,
+            we also make sure the layout, mobile view, links, and basic functionality are checked before launch.
+          </p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="contact-shell">
+
+    <div class="contact-form-panel">
+      <p class="contact-label">Contact Us</p>
+
+      <h2 class="contact-title">
+        Ready to build your brand with clarity?
+      </h2>
+
+      <p class="contact-copy">
+        Tell us what you are planning. Whether it is a website, social media management,
+        content direction, or a full digital setup — we will help you shape the right next step.
+      </p>
+
+      <form class="contact-form" id="contactForm">
+        <div class="contact-form-row">
+          <label>
+            First Name <span>*</span>
+            <input type="text" name="firstName" placeholder="First Name" required>
+          </label>
+
+          <label>
+            Last Name
+            <input type="text" name="lastName" placeholder="Last Name">
+          </label>
+        </div>
+
+        <label>
+          Email <span>*</span>
+          <input type="email" name="email" placeholder="Email Address" required>
+        </label>
+
+        <label>
+          What do you need help with? <span>*</span>
+          <select name="service" required>
+            <option value="">Select a service</option>
+            <option value="Website Design & Development">Website Design & Development</option>
+            <option value="Social Media Management">Social Media Management</option>
+            <option value="Brand Identity & Design">Brand Identity & Design</option>
+            <option value="Content Creation">Content Creation</option>
+            <option value="Digital Strategy">Digital Strategy</option>
+          </select>
+        </label>
+
+        <label>
+          Project Description <span>*</span>
+          <textarea name="message" placeholder="Briefly tell us about your project..." required></textarea>
+        </label>
+
+        <button class="contact-submit-btn" type="submit">
+          Send Inquiry
+        </button>
+      </form>
+    </div>
+
+    <div class="contact-cards">
+<a class="contact-detail-card" href="https://maps.google.com/?q=Cyberjaya" target="_blank" rel="noopener">        <span class="contact-card-icon">⌖</span>
+        <div>
+          <p>Location</p>
+          <h3>Cyberjaya</h3>
+          <small>Digital creative studio based in Malaysia.</small>
+        </div>
+      </a>
+
+      <a class="contact-detail-card" href="https://wa.me/601115456770" target="_blank" rel="noopener">
+        <span class="contact-card-icon">☎</span>
+        <div>
+          <p>Contact</p>
+          <h3>+60 11-1545 6770</h3>
+          <small>Talk to us and see how we can help your brand move better.</small>
+        </div>
+      </a>
+
+      <a class="contact-detail-card" href="mailto:hello@onlygoodlab.com">
+        <span class="contact-card-icon">✉</span>
+        <div>
+          <p>Email</p>
+          <h3>hello@onlygoodlab.com</h3>
+          <small>Send us your brief, idea, or project enquiry.</small>
+        </div>
+      </a>
+
+      <div class="contact-detail-card">
+        <span class="contact-card-icon">◎</span>
+        <div>
+          <p>Social</p>
+          <h3>@onlygoodlab</h3>
+          <small>Find us on Instagram, Facebook, and Threads.</small>
+
+          <div class="contact-social-row">
+            <a href="https://www.instagram.com/onlygoodlab" target="_blank" rel="noopener">IG</a>
+            <a href="https://www.facebook.com/onlygoodlab" target="_blank" rel="noopener">FB</a>
+            <a href="https://www.threads.net/@onlygoodlab" target="_blank" rel="noopener">TH</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <img src="img/vector4.png" alt="" class="footer-vector footer-vector-left" aria-hidden="true">
+  <img src="img/vector3.png" alt="" class="footer-vector footer-vector-right" aria-hidden="true">
+
+  <div class="footer-shell">
+
+    <div class="footer-brand">
+      <a href="#" class="footer-logo-wrap" aria-label="Only Good Lab home">
+        <img src="img/footer-logo.png" alt="Only Good Lab logo" class="footer-logo">
+      </a>
+
+      <p>
+        Digital creative studio for branding, social content, web design,
+        and structured digital direction.
+      </p>
+
+      <p class="footer-ssm">SSM Registration No: NS0317093-A</p>
+    </div>
+
+    <div class="footer-links">
+      <div class="footer-column">
+        <span>Navigate</span>
+        <a href="#">Home</a>
+        <a href="#about">About Us</a>
+        <a href="#services">Service</a>
+        <a href="#our-work">Our Work</a>
+        <a href="#contact">Contact</a>
+      </div>
+
+      <div class="footer-column">
+        <span>Social</span>
+        <a href="https://www.instagram.com/onlygoodlab" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.facebook.com/onlygoodlab" target="_blank" rel="noopener">Facebook</a>
+        <a href="https://www.threads.net/@onlygoodlab" target="_blank" rel="noopener">Threads</a>
+      </div>
+
+      <div class="footer-column">
+        <span>Contact</span>
+        <a href="mailto:hello@onlygoodlab.com">hello@onlygoodlab.com</a>
+        <a href="tel:+601115456770">+60 11-1545 6770</a>
+        <p>Kota Damansara</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <p>© <span data-footer-year>2026</span> Only Good Lab. All rights reserved.</p>
+    <a href="https://onlygoodlab.com" target="_blank" rel="noopener">onlygoodlab.com</a>
+  </div>
+</footer>
+</main>
+
+</body>
+</html>
