@@ -15,8 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
   let rafId = null;
   let isAnimating = false;
 
-const ease = 0.085;
-const wheelStrength = 1.04;
+const ease = 0.03;
+const wheelStrength = 1.1;
 
   function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
@@ -269,6 +269,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 /* =========================
    ABOUT US STICKY TEXT REVEAL
+   Mobile-optimised: smoother GSAP tween instead of class toggling on scroll
 ========================= */
 document.addEventListener("DOMContentLoaded", () => {
   if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
@@ -295,29 +296,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         return `<span class="about-word">${chars}</span>`;
       })
-      .join("");
+      .join(" ");
 
     aboutText.dataset.processed = "true";
   }
 
   const chars = Array.from(aboutText.querySelectorAll(".about-char"));
-  let previousActive = -1;
-
-  function updateActiveChars(activeCount) {
-    if (activeCount === previousActive) return;
-
-    if (activeCount > previousActive) {
-      for (let i = previousActive + 1; i <= activeCount; i++) {
-        if (chars[i]) chars[i].classList.add("is-active");
-      }
-    } else {
-      for (let i = previousActive; i > activeCount; i--) {
-        if (chars[i]) chars[i].classList.remove("is-active");
-      }
-    }
-
-    previousActive = activeCount;
-  }
 
   function getDistance(extraMove) {
     const textHeight = aboutText.scrollHeight;
@@ -328,47 +312,66 @@ document.addEventListener("DOMContentLoaded", () => {
   const mm = gsap.matchMedia();
 
   function createAboutScroll(config) {
-    const trigger = ScrollTrigger.create({
-      trigger: aboutSection,
-      start: "top top",
-      end: "bottom bottom",
-      scrub: true,
-      invalidateOnRefresh: true,
-      onUpdate: (self) => {
-        const progress = self.progress;
+    gsap.set(aboutText, {
+      y: 0,
+      force3D: true
+    });
 
-        const distance = getDistance(config.extraMove);
-        gsap.set(aboutText, {
-          y: -distance * progress
-        });
+    gsap.set(chars, {
+      color: "#d8dee7"
+    });
 
-        const revealProgress = Math.min(progress * config.revealSpeed, 1);
-        const activeCount = Math.floor(revealProgress * (chars.length - 1));
-
-        updateActiveChars(activeCount);
-      },
-      onLeaveBack: () => {
-        gsap.set(aboutText, { y: 0 });
-        updateActiveChars(-1);
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: aboutSection,
+        start: "top top",
+        end: "bottom bottom",
+        scrub: config.scrub,
+        invalidateOnRefresh: true,
+        anticipatePin: 1
       }
     });
 
+    tl.to(aboutText, {
+      y: () => -getDistance(config.extraMove),
+      duration: 1,
+      ease: "none",
+      force3D: true
+    }, 0);
+
+    tl.to(chars, {
+      color: "#047FEF",
+      duration: config.charDuration,
+      stagger: {
+        amount: config.revealAmount,
+        from: "start"
+      },
+      ease: "none"
+    }, 0);
+
     return () => {
-      trigger.kill();
+      if (tl.scrollTrigger) tl.scrollTrigger.kill();
+      tl.kill();
+      gsap.set(aboutText, { clearProps: "y" });
+      gsap.set(chars, { clearProps: "color" });
     };
   }
 
   mm.add("(min-width: 761px)", () => {
     return createAboutScroll({
-      revealSpeed: 1.35,
+      scrub: true,
+      revealAmount: 0.86,
+      charDuration: 0.035,
       extraMove: 24
     });
   });
 
   mm.add("(max-width: 760px)", () => {
     return createAboutScroll({
-      revealSpeed: 1.2,
-      extraMove: 34
+      scrub: 0.28,
+      revealAmount: 0.72,
+      charDuration: 0.02,
+      extraMove: 18
     });
   });
 
@@ -385,27 +388,30 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   tags.forEach((tag, index) => {
+    const isMobile = window.matchMedia("(max-width: 760px)").matches;
+
     gsap.to(tag, {
-      x: index % 2 === 0 ? 32 : -32,
-      y: index % 2 === 0 ? -22 : 22,
-      rotate: index % 2 === 0 ? 2 : -2,
+      x: isMobile ? (index % 2 === 0 ? 6 : -6) : (index % 2 === 0 ? 32 : -32),
+      y: isMobile ? (index % 2 === 0 ? -5 : 5) : (index % 2 === 0 ? -22 : 22),
+      rotate: isMobile ? (index % 2 === 0 ? 1 : -1) : (index % 2 === 0 ? 2 : -2),
       ease: "none",
       scrollTrigger: {
         trigger: aboutSection,
         start: "top bottom",
         end: "bottom top",
-        scrub: true,
+        scrub: isMobile ? 0.25 : true,
         invalidateOnRefresh: true
       }
     });
   });
 
   window.addEventListener("load", () => {
-    ScrollTrigger.refresh();
+    ScrollTrigger.refresh(true);
   });
 });
 /* =========================
    SERVICES CARD SWAP
+   Mobile-optimised: stacked centre cards instead of wide side spread
 ========================= */
 document.addEventListener("DOMContentLoaded", () => {
   if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
@@ -423,38 +429,42 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!track || !cards.length || !currentCounter) return;
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+  const isMobileView = () => window.matchMedia("(max-width: 760px)").matches;
 
-function getCardMetrics() {
-  const isMobile = window.matchMedia("(max-width: 760px)").matches;
+  function getCardMetrics() {
+    const isMobile = isMobileView();
 
-  return {
-    spreadX: isMobile ? 155 : 340,
-    maxX: isMobile ? 210 : 440,
-    spreadY: isMobile ? 5 : 12,
-    rotate: isMobile ? 6 : 11,
-    scaleLoss: isMobile ? 0.12 : 0.13,
+    return {
+      spreadX: isMobile ? 18 : 340,
+      maxX: isMobile ? 34 : 440,
+      spreadY: isMobile ? 22 : 12,
+      rotate: isMobile ? 0 : 11,
+      scaleLoss: isMobile ? 0.055 : 0.13,
+      minScale: isMobile ? 0.88 : 0.78,
+      fadeLoss: isMobile ? 0.72 : 0.42,
+      minOpacity: isMobile ? 0.12 : 0.18,
+      hideAfter: isMobile ? 1.45 : 2,
 
-    /* soft center lock */
-    lockZone: isMobile ? 0.34 : 0.26,
-    lockStrength: isMobile ? 0.82 : 0.78
-  };
-}
-
-function applyCenterLock(rawProgress) {
-  const metrics = getCardMetrics();
-  const nearestCard = Math.round(rawProgress);
-  const distanceToCenter = Math.abs(rawProgress - nearestCard);
-
-  if (distanceToCenter >= metrics.lockZone) {
-    return rawProgress;
+      /* soft center lock */
+      lockZone: isMobile ? 0.24 : 0.26,
+      lockStrength: isMobile ? 0.58 : 0.78
+    };
   }
 
-  const t = 1 - distanceToCenter / metrics.lockZone;
-  const smoothStrength = t * t * (3 - 2 * t);
-  const magneticStrength = metrics.lockStrength;
+  function applyCenterLock(rawProgress) {
+    const metrics = getCardMetrics();
+    const nearestCard = Math.round(rawProgress);
+    const distanceToCenter = Math.abs(rawProgress - nearestCard);
 
-  return rawProgress + (nearestCard - rawProgress) * smoothStrength * magneticStrength;
-}
+    if (distanceToCenter >= metrics.lockZone) {
+      return rawProgress;
+    }
+
+    const t = 1 - distanceToCenter / metrics.lockZone;
+    const smoothStrength = t * t * (3 - 2 * t);
+
+    return rawProgress + (nearestCard - rawProgress) * smoothStrength * metrics.lockStrength;
+  }
 
   function renderCards(rawProgress) {
     const metrics = getCardMetrics();
@@ -466,16 +476,15 @@ function applyCenterLock(rawProgress) {
 
       const x = clamp(relative * metrics.spreadX, -metrics.maxX, metrics.maxX);
       const y = abs * metrics.spreadY;
-      const scale = Math.max(1 - abs * metrics.scaleLoss, 0.78);
+      const scale = Math.max(1 - abs * metrics.scaleLoss, metrics.minScale);
       const rotation = relative * metrics.rotate;
-
       const isFocused = abs < 0.08;
 
       const opacity = isFocused
         ? 1
-        : abs > 2
+        : abs > metrics.hideAfter
           ? 0
-          : Math.max(1 - abs * 0.42, 0.18);
+          : Math.max(1 - abs * metrics.fadeLoss, metrics.minOpacity);
 
       const zIndex = isFocused ? 200 : 100 - Math.round(abs * 20);
 
@@ -486,7 +495,9 @@ function applyCenterLock(rawProgress) {
         rotation,
         opacity,
         zIndex,
-        filter: "none"
+        pointerEvents: isFocused ? "auto" : "none",
+        filter: "none",
+        force3D: true
       });
     });
 
@@ -507,8 +518,9 @@ function applyCenterLock(rawProgress) {
     trigger: track,
     start: "top top",
     end: "bottom bottom",
-    scrub: 1.2,
+    scrub: isMobileView() ? 0.18 : 1.2,
     invalidateOnRefresh: true,
+    anticipatePin: 1,
 
     onUpdate: renderFromScroll,
     onRefresh: renderFromScroll,
@@ -533,15 +545,17 @@ function applyCenterLock(rawProgress) {
   });
 
   vectors.forEach((vector, index) => {
+    const isMobile = isMobileView();
+
     gsap.to(vector, {
-      y: index === 0 ? -18 : 18,
-      x: index === 0 ? 10 : -10,
+      y: isMobile ? (index === 0 ? -6 : 6) : (index === 0 ? -18 : 18),
+      x: isMobile ? (index === 0 ? 4 : -4) : (index === 0 ? 10 : -10),
       ease: "none",
       scrollTrigger: {
         trigger: track,
         start: "top bottom",
         end: "bottom top",
-        scrub: true,
+        scrub: isMobile ? 0.25 : true,
         invalidateOnRefresh: true
       }
     });
